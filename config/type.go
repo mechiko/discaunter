@@ -44,9 +44,9 @@ func New(cfgName string, inUserHome bool) (cfg *Config, err error) {
 	if inUserHome {
 		cfg.HomePath = osUserHomeDir()
 	}
-	if err := cfg.initPaths(); err != nil {
-		return nil, fmt.Errorf("%s: failed to initialize paths: %w", modError, err)
-	}
+	// if err := cfg.initPaths(); err != nil {
+	// 	return nil, fmt.Errorf("%s: failed to initialize paths: %w", modError, err)
+	// }
 	cfg.configFileName = filepath.Join(cfg.absConfigPath, configName+".toml")
 	viperConfigPath := configPath
 	if !strings.HasPrefix(viperConfigPath, ".") {
@@ -74,10 +74,10 @@ func New(cfgName string, inUserHome bool) (cfg *Config, err error) {
 		return nil, fmt.Errorf("%s %w", modError, err)
 	}
 	// игнорируем ошибку этот вызов для первого сохранения файла конфига когда его нет
-	err = viperOrigin.SafeWriteConfig()
-	if err != nil {
-		cfg.warning += fmt.Sprintf("%s\n", err.Error())
-	}
+	// err = viperOrigin.SafeWriteConfig()
+	// if err != nil {
+	// 	cfg.warning += fmt.Sprintf("%s\n", err.Error())
+	// }
 	return cfg, nil
 }
 

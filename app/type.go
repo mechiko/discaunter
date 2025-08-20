@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"go.uber.org/zap"
 )
 
 // type IApp interface {
@@ -25,19 +24,19 @@ type app struct {
 	uuid    string // идентификатор для уникальности формы
 	config  *config.Config
 	options *config.Configuration // копия config.Configuration
-	loger   *zap.SugaredLogger
-	pwd     string
-	output  string
+	// loger   *zap.SugaredLogger
+	pwd    string
+	output string
 }
 
 var _ domain.Apper = (*app)(nil)
 
 // const modError = "app"
 
-func New(cfg *config.Config, logger *zap.SugaredLogger, pwd string) *app {
+func New(cfg *config.Config, pwd string) *app {
 	newApp := &app{}
 	newApp.pwd = pwd
-	newApp.loger = logger
+	// newApp.loger = logger
 	newApp.config = cfg
 	newApp.options = cfg.Configuration()
 	newApp.uuid = uuid.New().String()
@@ -61,9 +60,9 @@ func (a *app) Config() *config.Config {
 	return a.config
 }
 
-func (a *app) Logger() *zap.SugaredLogger {
-	return a.loger
-}
+// func (a *app) Logger() *zap.SugaredLogger {
+// 	return a.loger
+// }
 
 // выдаем адрес структуры опций программы чтобы править по месту
 func (a *app) Options() *config.Configuration {
@@ -101,7 +100,7 @@ func (a *app) CreatePath() error {
 		} else {
 			a.options.Output = output
 		}
-		a.loger.Infof("путь output приложения %s", a.options.Output)
+		// a.loger.Infof("путь output приложения %s", a.options.Output)
 	}
 	return nil
 }

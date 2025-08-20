@@ -5,7 +5,6 @@ import (
 	"discaunter/config"
 	"discaunter/processing"
 	"discaunter/xmltmpl"
-	"discaunter/zaplog"
 	"flag"
 	"fmt"
 	"os"
@@ -48,34 +47,34 @@ func main() {
 		errMessageExit("ошибка конфигурации", err.Error())
 	}
 
-	var logsOutConfig = map[string][]string{
-		"logger": {"stdout", filepath.Join(cfg.LogPath(), config.Name)},
-	}
-	zl, err := zaplog.New(logsOutConfig, true)
-	if err != nil {
-		errMessageExit("ошибка создания логера", err.Error())
-	}
-	defer zl.Shutdown()
+	// var logsOutConfig = map[string][]string{
+	// 	"logger": {"stdout", filepath.Join(cfg.LogPath(), config.Name)},
+	// }
+	// zl, err := zaplog.New(logsOutConfig, true)
+	// if err != nil {
+	// 	errMessageExit("ошибка создания логера", err.Error())
+	// }
+	// defer zl.Shutdown()
 
-	lg, err := zl.GetLogger("logger")
-	if err != nil {
-		zl.Shutdown()
-		errMessageExit("ошибка получения логера", err.Error())
-	}
-	loger := lg.Sugar()
-	loger.Debug("zaplog started")
-	loger.Infof("mode = %s", config.Mode)
-	if cfg.Warning() != "" {
-		loger.Infof("pkg:config warning %s", cfg.Warning())
-	}
+	// lg, err := zl.GetLogger("logger")
+	// if err != nil {
+	// 	zl.Shutdown()
+	// 	errMessageExit("ошибка получения логера", err.Error())
+	// }
+	// loger := lg.Sugar()
+	// loger.Debug("zaplog started")
+	// loger.Infof("mode = %s", config.Mode)
+	// if cfg.Warning() != "" {
+	// 	loger.Infof("pkg:config warning %s", cfg.Warning())
+	// }
 
 	errProcessExit := func(title string, errDescription string) {
-		loger.Errorf("%s %s", title, errDescription)
-		zl.Shutdown()
+		// loger.Errorf("%s %s", title, errDescription)
+		// zl.Shutdown()
 		errMessageExit(title, errDescription)
 	}
 	// создаем приложение с опциями из конфига и логером основным
-	app := app.New(cfg, loger, dir)
+	app := app.New(cfg, dir)
 	// инициализируем пути необходимые приложению
 	app.CreatePath()
 
@@ -83,25 +82,25 @@ func main() {
 	if fileXLSX == "" {
 		fileXLSX, err = utility.DialogOpenFile([]utility.FileType{utility.Excel, utility.All}, "", "")
 		if err != nil {
-			zl.Shutdown()
+			// zl.Shutdown()
 			errMessageExit("ошибка", err.Error())
 		}
 	}
 
 	proc, err := processing.New(app)
 	if err != nil {
-		zl.Shutdown()
+		// zl.Shutdown()
 		errProcessExit("запуск обработки с ошибкой ", err.Error())
 	}
 
 	err = proc.ReadXlsx(fileXLSX)
 	if err != nil {
-		zl.Shutdown()
+		// zl.Shutdown()
 		errMessageExit("ошибка чтения файла", err.Error())
 	}
 	xml, err := xmltmpl.NewTemplate(app).StringXML(proc)
 	if err != nil {
-		zl.Shutdown()
+		// zl.Shutdown()
 		errMessageExit("ошибка чтения файла", err.Error())
 	}
 
@@ -110,7 +109,7 @@ func main() {
 	fileXml = utility.TimeFileName(fileXml) + ".xml"
 	fileXml, err = utility.DialogSaveFile(utility.All, fileXml, ".")
 	if err != nil {
-		zl.Shutdown()
+		// zl.Shutdown()
 		errMessageExit("ошибка диалога выбора файла для записи", err.Error())
 	}
 	if fileXml != "" {
@@ -119,7 +118,7 @@ func main() {
 		}
 		err := os.WriteFile(fileXml, xml, 0644) // 0644 represents file permissions (rw-r--r--)
 		if err != nil {
-			zl.Shutdown()
+			// zl.Shutdown()
 			errMessageExit("ошибка диалога выбора файла для записи", err.Error())
 		}
 	}

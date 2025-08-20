@@ -6,5 +6,5 @@ const Name = "discaunter"
 var Mode = "development"
 
 // This should preferably be set at build time via build scripts
-// Set during build: go build -ldflags "-X config.ExeVersion=v1.0.0"
+// go build -ldflags="-X discaunter/config.ExeVersion=v1.0.0"
 const ExeVersion string = "0.0.1"

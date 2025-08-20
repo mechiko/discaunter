@@ -2,9 +2,9 @@
 # set positional-arguments
 shebang := 'pwsh.exe'
 # Variables
-exe_name := "belzakaz"
-mod_name := "belzakaz"
-ld_flags :="-H=windowsgui -s -w -X 'discaunter/entity.Mode=production'"
+exe_name := "discaunter"
+mod_name := "discaunter"
+ld_flags :="-s -w -X discaunter/config.Mode=production -X discaunter/config.ExeVersion=0.0.1"
 
 default:
   just --list
